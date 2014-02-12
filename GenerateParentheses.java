@@ -1,52 +1,43 @@
 /*
- * Key point: deepth first strategy
- *   I can't conceive this solution by myself. Refering from others.
- * To-Do: making sure the java parameter passing mechanism
+ * Re-do this question, now dfsWorker() return void
  */
-
 public class Solution {
     public ArrayList<String> generateParenthesis(int n) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("");
-        return helper(n, 0, 0, sb);
+        ArrayList<String> result = new ArrayList<String>();
+        StringBuilder sb = new StringBuilder();
+        
+        if(n <= 0)
+            return result;
+            
+        dfsWorker(n, result, sb, 0, 0);
+        return result;
+        
     }
     
-    //parameter: total pairs n, left parenthese left, right parenthese right, temp buffer temp
-    public ArrayList<String> helper(int n, int left, int right, StringBuffer sb){
-        ArrayList<String> result = new ArrayList<String>();
+    public void dfsWorker(int n, ArrayList<String> result, StringBuilder sb, int left, int right){
         
-        if(left > n || right > n)
-            return result;
-        
-        //Work has been done, adding current StringBuffer to result    
-        if(left == n && right == n){
+        //"exit" for recursive call
+        if(left == right && right == n){
             result.add(sb.toString());
-            return result;
+            return;
         }
         
-        //left parenthese "(" is not enough
-        if(left < n){
+        //invalid combination
+        if(left < right || left > n || right > n)
+            return;
             
-            //adding a "(" to the end of string buffer sb
-            StringBuffer temp = new StringBuffer(sb);
-            temp.append("(");
-            
-            //call helper() recursively
-            result.addAll( helper(n, left+1, right, temp) );
+        //condition that add '('    
+        if(left < n){    
+            sb.append('(');    
+            dfsWorker(n, result, sb, left+1, right);
+            sb.deleteCharAt(sb.length()-1);
         }
         
-        //only if right parenthese ")" is less than right parenthese ")"
-        //we can add a ")"; otherwise, we shouldn't add ")".
+        //condition that add ')'
         if(right < left){
-            
-            //adding a ")" to the end of string buffer sb
-            StringBuffer temp = new StringBuffer(sb);
-            temp.append(")");
-            
-            //call helper() recursively
-            result.addAll( helper(n, left, right+1, temp) );
+            sb.append(')');
+            dfsWorker(n, result, sb, left, right+1);
+            sb.deleteCharAt(sb.length()-1);
         }
-        
-        return result;
     }
 }
