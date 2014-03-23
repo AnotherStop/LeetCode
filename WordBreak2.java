@@ -42,6 +42,10 @@ public class Solution {
         for(Integer end : record.get(current)){
 
             String sub=s.substring(current,end);
+            /*
+                since the loop may have many iterations, we should keep the reference
+                of "solution", rather than writing as "solution += ..."
+            */
             String newSolution = solution+(current==0 ? sub : " "+sub);
             
             if(end == s.length()) 
